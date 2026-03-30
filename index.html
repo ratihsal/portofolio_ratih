@@ -163,7 +163,19 @@ function App() {
   const [text, setText] = React.useState("");
   const [charIndex, setCharIndex] = React.useState(0);
   const [roleIndex, setRoleIndex] = React.useState(0);
+  const [isDesktop, setIsDesktop] = React.useState(false); // state untuk desktop
+
   const roles = ["Web Developer", "Java Programmer", "UI/UX Designer"];
+
+  // Detect window size
+  React.useEffect(() => {
+    setIsDesktop(window.innerWidth > 768);
+
+    const handleResize = () => setIsDesktop(window.innerWidth > 768);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Typing Effect
   React.useEffect(() => {
@@ -173,7 +185,8 @@ function App() {
         setCharIndex(prev => prev + 1);
       } else {
         setTimeout(() => {
-          setText(""); setCharIndex(0);
+          setText(""); 
+          setCharIndex(0);
           setRoleIndex((roleIndex + 1) % roles.length);
         }, 2000);
       }
@@ -183,24 +196,24 @@ function App() {
 
   // Scroll Reveal
   React.useEffect(() => {
-  const reveals = document.querySelectorAll(".reveal");
+    const reveals = document.querySelectorAll(".reveal");
 
-  const revealOnScroll = () => {
-    reveals.forEach(el => {
-      const windowHeight = window.innerHeight;
-      const elementTop = el.getBoundingClientRect().top;
+    const revealOnScroll = () => {
+      reveals.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
 
-      if (elementTop < windowHeight - 100) {
-        el.classList.add("active");
-      }
-    });
-  };
+        if (elementTop < windowHeight - 100) {
+          el.classList.add("active");
+        }
+      });
+    };
 
-  window.addEventListener("scroll", revealOnScroll);
-  revealOnScroll(); // langsung jalan saat load
+    window.addEventListener("scroll", revealOnScroll);
+    revealOnScroll(); // langsung jalan saat load
 
-  return () => window.removeEventListener("scroll", revealOnScroll);
-}, []);
+    return () => window.removeEventListener("scroll", revealOnScroll);
+  }, []);
 
   const skills = [
     { name: "JavaScript", progress: 76 },
@@ -234,7 +247,7 @@ function App() {
   return (
     <div>
       {/* Particles */}
-      {window.innerWidth > 768 && Array.from({length: 25}).map((_, i) => (
+      {isDesktop && Array.from({length: 25}).map((_, i) => (
         <div key={i} className="particle" style={{
           left: `${Math.random()*100}%`,
           width: `${2+Math.random()*4}px`,
@@ -278,9 +291,49 @@ function App() {
 
       {/* HERO */}
       <section id="home" className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-28">
-  
-  <div className="relative mb-16 group flex items-center justify-center">
+        <div className="relative mb-16 group flex items-center justify-center">
+          <div className="w-60 h-60 glass rounded-3xl p-3 bg-gradient-to-br from-[#A78BFA]/20 to-[#F4C430]/20">
+            <img 
+              src="Ratih.jpeg" 
+              alt="Ratih"
+              className="w-full h-full rounded-2xl object-cover border-4 border-white/30 transition-transform duration-700 group-hover:scale-110"
+            />
+          </div>
+        </div>
 
+        <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight">
+          Hi, I'm <span className="block neon-text">Ratih Salsabila</span>
+        </h1>
+
+        <div className="glass px-12 py-6 rounded-3xl mb-12 w-fit mx-auto">
+          <div className="text-2xl font-semibold text-[#A78BFA] h-12 flex items-center justify-center">
+            {text || <i className="fas fa-circle-notch animate-spin"></i>} |
+          </div>
+        </div>
+
+        <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-16 leading-relaxed">
+          Passionate developer creating <span className="neon-text">beautiful</span> and <span className="neon-text">functional</span> digital experiences
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-6">
+          <a href="#projects" className="glass px-12 py-6 rounded-3xl font-semibold text-xl hover:neon-glow transition-all flex items-center justify-center gap-3">
+            <i className="fas fa-rocket"></i> Explore Projects
+          </a>
+          <a href="#contact" className="glass px-12 py-6 rounded-3xl font-semibold text-xl border border-white/20 hover:bg-white/10 transition-all flex items-center justify-center gap-3">
+            <i className="fas fa-envelope"></i> Say Hello
+          </a>
+        </div>
+      </section>
+
+      {/* ABOUT, SKILLS, PROJECTS, CONTACT */}
+      {/* Sama seperti sebelumnya, tidak perlu ubah */}
+      {/* ... copy semua section dari kode sebelumnya */}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 
 
 
