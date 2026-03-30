@@ -169,14 +169,24 @@ function App() {
 
   // Scroll Reveal
   React.useEffect(() => {
-    const reveals = document.querySelectorAll(".reveal");
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("active");
-      });
-    }, { threshold: 0.1 });
-    reveals.forEach(r => observer.observe(r));
-  }, []);
+  const reveals = document.querySelectorAll(".reveal");
+
+  const revealOnScroll = () => {
+    reveals.forEach(el => {
+      const windowHeight = window.innerHeight;
+      const elementTop = el.getBoundingClientRect().top;
+
+      if (elementTop < windowHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", revealOnScroll);
+  revealOnScroll(); // langsung jalan saat load
+
+  return () => window.removeEventListener("scroll", revealOnScroll);
+}, []);
 
   const skills = [
     { name: "JavaScript", progress: 76 },
@@ -254,12 +264,21 @@ function App() {
 
       {/* HERO */}
       <section id="home" className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-28">
-        <div className="relative mb-16 group">
-          <div className="w-60 h-60 glass rounded-3xl p-3 float bg-gradient-to-br from-[#A78BFA]/20 to-[#F4C430]/20">
-            <img src="Ratih.jpeg" className="w-full h-full rounded-2xl object-cover border-4 border-white/30 group-hover:scale-110 transition-all duration-700" />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#A78BFA] to-[#F4C430] rounded-3xl blur-3xl opacity-40 group-hover:opacity-70 -z-10"></div>
-        </div>
+  
+  <div className="relative mb-16 group flex items-center justify-center">
+
+    {/* BLUR GLOW (FIXED) */}
+    <div className="absolute inset-0 scale-90 bg-gradient-to-r from-[#A78BFA] to-[#F4C430] rounded-3xl blur-lg md:blur-xl opacity-20 md:opacity-30 group-hover:opacity-50 transition-all duration-500 -z-10"></div>
+
+    {/* IMAGE */}
+    <div className="w-60 h-60 glass rounded-3xl p-3 bg-gradient-to-br from-[#A78BFA]/20 to-[#F4C430]/20">
+      <img 
+        src="Ratih.jpeg" 
+        alt="Ratih"
+        className="w-full h-full rounded-2xl object-cover border-4 border-white/30 transition-transform duration-700 group-hover:scale-110"
+      />
+    </div>
+    </div>
 
         <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight">
           Hi, I'm <span className="block neon-text">Ratih Salsabila</span>
