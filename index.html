@@ -61,7 +61,7 @@ h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
 
 .glass {
   background: var(--glass);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   box-shadow: 0 25px 50px rgba(0,0,0,0.4);
 }
@@ -234,7 +234,7 @@ function App() {
   return (
     <div>
       {/* Particles */}
-      {Array.from({length: 25}).map((_, i) => (
+      {window.innerWidth > 768 && Array.from({length: 25}).map((_, i) => (
         <div key={i} className="particle" style={{
           left: `${Math.random()*100}%`,
           width: `${2+Math.random()*4}px`,
