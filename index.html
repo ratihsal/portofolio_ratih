@@ -10,9 +10,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- REACT -->
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js" defer></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" defer></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
 
 <!-- TAILWIND -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -64,14 +64,28 @@ h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
 .glass {
   background: var(--glass);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   box-shadow: 0 25px 50px rgba(0,0,0,0.4);
 }
 
+@supports not (backdrop-filter: blur(10px)) {
+  .glass {
+    background: rgba(0,0,0,0.5);
+  }
+}
+
 @media (max-width: 768px) {
   .glass {
-    backdrop-filter: blur(4px); /* Dikurangi dari 6px */
-    background: rgba(255,255,255,0.12); /* Background lebih solid */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: rgba(255,255,255,0.12);
+  }
+  
+  @supports not (backdrop-filter: blur(4px)) {
+    .glass {
+      background: rgba(0,0,0,0.7);
+    }
   }
 }
 
@@ -104,7 +118,14 @@ h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
   transition: all 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
   background: rgba(255,255,255,0.04);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid transparent;
+}
+
+@supports not (backdrop-filter: blur(20px)) {
+  .modern-card {
+    background: rgba(0,0,0,0.3);
+  }
 }
 .modern-card:hover {
   transform: translateY(-20px) scale(1.03);
@@ -150,23 +171,23 @@ h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
   100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
 }
 
-.mobile-menu {
-  transform: translateX(100%);
-  transition: transform 0.4s ease;
+.nav-solid {
+  background: rgba(10,10,26,0.9);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
 }
-.mobile-menu.open { transform: translateX(0); }
 
 /* FIX MOBILE NAVBAR Z-INDEX */
 @media (max-width: 1024px) {
   nav {
-    z-index: 40 !important; /* Dikurangi dari 50 */
+    z-index: 30 !important; /* Kurangi agar tidak menutupi konten */
   }
   
   /* Pastikan hero section selalu di atas navbar di mobile */
   #home {
     padding-top: 120px !important; /* Tambah padding-top */
     position: relative;
-    z-index: 10;
+    z-index: 20;
   }
 }
 
@@ -174,7 +195,7 @@ h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
 @media (max-width: 768px) {
   section {
     position: relative;
-    z-index: 10;
+    z-index: 20;
   }
   
   .min-h-screen {
@@ -305,7 +326,7 @@ function App() {
       ))}
 
       {/* NAVBAR */}
-      <nav className="fixed top-0 w-full glass z-50 px-6 py-5">
+      <nav className="fixed top-0 w-full nav-solid z-50 px-6 py-5">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="text-3xl font-bold neon-text flex items-center gap-3">
             <i className="fas fa-crown text-yellow-400 text-xl"></i>
@@ -331,7 +352,7 @@ function App() {
           </button>
         </div>
 
-        <div className={`lg:hidden mt-4 glass rounded-3xl overflow-hidden ${menuOpen ? 'mobile-menu open' : 'mobile-menu'}`}>
+        <div className={`lg:hidden mt-4 nav-solid rounded-3xl overflow-hidden ${menuOpen ? 'mobile-menu open' : 'mobile-menu'}`}>
           {['Home','About','Skills','Projects','Contact'].map(item => (
             <a 
               key={item} 
