@@ -10,9 +10,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- REACT -->
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js" defer></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" defer></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
+<script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js" defer></script>
+<script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js" defer></script>
 
 <!-- TAILWIND -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -177,17 +177,25 @@ h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
   box-shadow: 0 25px 50px rgba(0,0,0,0.4);
 }
 
+.mobile-menu {
+  display: none;
+}
+
 /* FIX MOBILE NAVBAR Z-INDEX */
 @media (max-width: 1024px) {
   nav {
-    z-index: 30 !important; /* Kurangi agar tidak menutupi konten */
+    z-index: 10 !important; /* Kurangi lebih agar tidak menutupi */
   }
   
   /* Pastikan hero section selalu di atas navbar di mobile */
   #home {
-    padding-top: 120px !important; /* Tambah padding-top */
     position: relative;
     z-index: 20;
+  }
+  
+  .mobile-menu {
+    transform: translateX(0) !important; /* Selalu terbuka di mobile */
+    display: block !important;
   }
 }
 
@@ -210,7 +218,6 @@ h1,h2,h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
 
 <script type="text/babel">
 function App() {
-  const [menuOpen, setMenuOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const [charIndex, setCharIndex] = React.useState(0);
   const [roleIndex, setRoleIndex] = React.useState(0);
@@ -272,16 +279,7 @@ function App() {
     };
   }, []);
 
-  // Fix untuk menu close saat resize
-  React.useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 1024) {
-        setMenuOpen(false);
-      }
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  // Fix untuk menu close saat resize - DIHAPUS karena menggunakan CSS toggle
 
   const skills = [
     { name: "JavaScript", progress: 76 },
@@ -325,8 +323,7 @@ function App() {
         }} />
       ))}
 
-      {/* NAVBAR */}
-      <nav className="fixed top-0 w-full nav-solid z-50 px-6 py-5">
+      <nav className="w-full nav-solid z-50 px-6 py-5">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="text-3xl font-bold neon-text flex items-center gap-3">
             <i className="fas fa-crown text-yellow-400 text-xl"></i>
@@ -343,22 +340,14 @@ function App() {
             ))}
           </div>
 
-          <button 
-            className="lg:hidden p-3 glass rounded-2xl" 
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <i className={`fas text-xl ${menuOpen ? 'fa-times text-red-400' : 'fa-bars text-[#A78BFA]'}`}></i>
-          </button>
-        </div>
+          </div>
 
-        <div className={`lg:hidden mt-4 nav-solid rounded-3xl overflow-hidden ${menuOpen ? 'mobile-menu open' : 'mobile-menu'}`}>
+        <div className="lg:hidden mt-4 nav-solid rounded-3xl overflow-hidden mobile-menu">
           {['Home','About','Skills','Projects','Contact'].map(item => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`} 
-              className="block px-8 py-5 text-gray-300 hover:text-white hover:bg-white/10 border-b border-white/5 last:border-b-0 transition-all" 
-              onClick={() => setMenuOpen(false)}
+              className="block px-8 py-5 text-gray-300 hover:text-white hover:bg-white/10 border-b border-white/5 last:border-b-0 transition-all"
             >
               {item}
             </a>
