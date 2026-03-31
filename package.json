@@ -2,10 +2,11 @@
   "name": "portfolio",
   "version": "1.0.0",
   "scripts": {
-    "build": "babel index.html --out-file index-compiled.html --presets=@babel/preset-react"
+    "build": "parcel build index.html --dist-dir dist"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
-    "@babel/preset-react": "^7.23.0"
+    "@babel/preset-react": "^7.23.0",
+    "parcel": "^2.16.4"
   }
 }
